@@ -99,7 +99,7 @@
 首次给变量赋值切记使用var关键字变量没有赋值的话，默认会作为一个全局变量（一切无住的都是window的），要尽量避免全局变量.&amp;gt; 注意：在严格模式下（use strict）不声明将报错。
 
 使用&amp;quot;===&amp;quot;代替&amp;quot;==&amp;quot;原因： ==和=！操作符存在隐式转换，导致”==”速度变慢，尽量能用全等就用全等。面试题：console.log(">
-<meta property="og:updated_time" content="2017-03-18T03:30:40.693Z">
+<meta property="og:updated_time" content="2017-03-18T03:35:42.525Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端开发经典技巧总结">
 <meta name="twitter:description" content="前端开发经典技巧总结
@@ -381,9 +381,7 @@
 </li>
 <li><h4 id="行尾使用分号"><a href="#行尾使用分号" class="headerlink" title="行尾使用分号"></a><code>行尾使用分号</code></h4><p>实践中最好还是使用分号，忘记写也没事，大部分情况下<code>javascript</code>解释器会自动添加.<br>影响：return {a=1} 如果不加”;”,js解析器会给你变成retturn; {a=1};<br>这时候你只能哭了。。&gt; 建议保持良好的编码习惯，可以使用webstorm这样强的带检错工具。</p>
 </li>
-<li><h4 id="使用对象构造器"><a href="#使用对象构造器" class="headerlink" title="使用对象构造器"></a><code>使用对象构造器</code></h4><pre><code>&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;person&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(firstName,lastName)&lt;/span&gt;&lt;/span&gt;{                       &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.firstName = firstName;     &lt;span class=&quot;hljs-keyword&quot;&gt;this&lt;/span&gt;.lastName = lastName;
-</code></pre><p>}<br><span class="hljs-keyword">var</span> su = <span class="hljs-keyword">new</span> person(<span class="hljs-string">“susan”</span>,<span class="hljs-string">“xiaowang”</span>)</p>
-</li>
+<li><h4 id="使用对象构造器"><a href="#使用对象构造器" class="headerlink" title="使用对象构造器"></a><code>使用对象构造器</code></h4>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">person</span>(<span class="params">firstName,lastName</span>)</span>&#123;</div><div class="line">  <span class="keyword">this</span>.firstName = firstName;</div><div class="line">  <span class="keyword">this</span>.lastName = lastName;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> su = <span class="keyword">new</span> person(<span class="string">"susan"</span>,<span class="string">"laowang"</span>);</div></pre></td></tr></table></figure></li>
 </ol>
 
       
