@@ -93,10 +93,12 @@
 <meta property="og:url" content="http://yoursite.com/2018/02/08/svg中文字换行，动态生成tspan标签，依赖d3/index.html">
 <meta property="og:site_name" content="苏亚强的个人博客">
 <meta property="og:description" content="最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。12345678910111213141516171819202122232425262728293031323334353637&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html l">
-<meta property="og:updated_time" content="2018-02-08T06:31:42.031Z">
+<meta property="og:image" content="http://yoursite.com/2018/02/08/svg中文字换行，动态生成tspan标签，依赖d3/01.jpg">
+<meta property="og:updated_time" content="2018-02-08T07:10:23.437Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="svg中文字换行--动态生成tspan标签">
 <meta name="twitter:description" content="最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。12345678910111213141516171819202122232425262728293031323334353637&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html l">
+<meta name="twitter:image" content="http://yoursite.com/2018/02/08/svg中文字换行，动态生成tspan标签，依赖d3/01.jpg">
 
 
 
@@ -364,6 +366,7 @@
 
       
         <h4 id="最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。"><a href="#最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。" class="headerlink" title="最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。"></a>最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset="UTF-8"&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;div id="svgBox"&gt;</div><div class="line">    &lt;svg width="800" height="400" style="background-color: #000000"&gt;</div><div class="line">        &lt;text style="font-size:16pt;font-style:normal;font-weight:normal;fill:#ffffff;font-family:宋体;"&gt;</div><div class="line">            &lt;tspan x="30" y="30"&gt;2583.00&lt;/tspan&gt;</div><div class="line">        &lt;/text&gt;</div><div class="line">    &lt;/svg&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div><div class="line">&lt;script src="js/d3.min.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    //选取元素</div><div class="line">    var Text = d3.select("text");</div><div class="line">    //向元素中插入标签</div><div class="line">    var tSpan = Text</div><div class="line">            .append("tspan")</div><div class="line">            .text("kW")</div><div class="line">            .attr("x","30")</div><div class="line">            .attr("y","50");</div><div class="line"></div><div class="line">    //获取动态添加完的svg里的所有内容，保存下来</div><div class="line">    var svgInner = d3.select("#svgBox").html();</div><div class="line"></div><div class="line">    //容器内的svg清除</div><div class="line">    var svgBox = d3.select("#svgBox")</div><div class="line">                    .html("");</div><div class="line">    //重新渲染保存下来的svg</div><div class="line">    d3.select("#svgBox")// .append("svg")</div><div class="line">            .html(svgInner);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<h4 id="效果"><a href="#效果" class="headerlink" title="效果"></a><code>效果</code></h4><p><img src="/2018/02/08/svg中文字换行，动态生成tspan标签，依赖d3/01.jpg" alt=""></p>
 
       
     </div>
@@ -593,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。"><span class="nav-number">1.</span> <span class="nav-text">最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。"><span class="nav-number">1.</span> <span class="nav-text">最近项目中需要将svg中的文字进行换行显示，发现动态的去生成tspan标签，即使标签生成成功但是依然显示不到浏览器上，通过查询资料，动态改变完svg以后需要将svg进行重新的渲染，所以尝试用下面的方法去解决。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#效果"><span class="nav-number">2.</span> <span class="nav-text">效果</span></a></li></ol></div>
             
 
           </div>
