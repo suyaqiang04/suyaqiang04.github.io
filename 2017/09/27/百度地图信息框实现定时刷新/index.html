@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="2017.9.27
+公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626">
+<meta property="og:type" content="article">
+<meta property="og:title" content="百度地图自定义覆盖物和信息框并实现数据的定时刷新">
+<meta property="og:url" content="http://yoursite.com/2017/09/27/百度地图信息框实现定时刷新/index.html">
+<meta property="og:site_name" content="苏亚强的个人博客">
+<meta property="og:description" content="2017.9.27
+公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626">
+<meta property="og:updated_time" content="2018-02-08T06:36:07.411Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="百度地图自定义覆盖物和信息框并实现数据的定时刷新">
+<meta name="twitter:description" content="2017.9.27
+公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/27/百度地图信息框实现定时刷新/"/>
+
+
+
+
+
+  <title> 百度地图自定义覆盖物和信息框并实现数据的定时刷新 | 苏亚强的个人博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">苏亚强的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">前行中的web前端工程师</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/27/百度地图信息框实现定时刷新/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="苏亚强">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="苏亚强的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                百度地图自定义覆盖物和信息框并实现数据的定时刷新
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T00:00:00+08:00">
+                2017-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><em>2017.9.27</em></p>
+<h5 id="公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）"><a href="#公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）" class="headerlink" title="公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）"></a>公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> timeOut = <span class="string">""</span>;</div><div class="line"></div><div class="line">   <span class="comment">//设置弹出框数据 前面两个经度和纬度是必须要有的；</span></div><div class="line">   <span class="keyword">var</span> data_infoveh = [</div><div class="line">       [<span class="number">117.215914</span>,<span class="number">39.190908</span>,<span class="string">'1'</span>,<span class="string">'30'</span>,<span class="string">'0001'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">100</span>,<span class="string">'1:30'</span>],</div><div class="line">       [<span class="number">129.404425</span>,<span class="number">37.669868</span>,<span class="string">'2'</span>,<span class="string">'30'</span>,<span class="string">'0002'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">200</span>,<span class="string">'2:30'</span>],</div><div class="line">       [<span class="number">111.716147</span>,<span class="number">25.55156</span>,<span class="string">'3'</span>,<span class="string">'30'</span>,<span class="string">'0003'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">300</span>,<span class="string">'3:30'</span>],</div><div class="line">       [<span class="number">115.225914</span>,<span class="number">39.290908</span>,<span class="string">'4'</span>,<span class="string">'30'</span>,<span class="string">'0004'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">400</span>,<span class="string">'4:30'</span>],</div><div class="line">       [<span class="number">126.454425</span>,<span class="number">37.769868</span>,<span class="string">'5'</span>,<span class="string">'30'</span>,<span class="string">'0005'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">500</span>,<span class="string">'5:30'</span>],</div><div class="line">       [<span class="number">117.716147</span>,<span class="number">25.65156</span>,<span class="string">'6'</span>,<span class="string">'30'</span>,<span class="string">'0006'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">600</span>,<span class="string">'6:30'</span>],</div><div class="line">       [<span class="number">118.235914</span>,<span class="number">39.390908</span>,<span class="string">'7'</span>,<span class="string">'30'</span>,<span class="string">'0007'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">700</span>,<span class="string">'7:30'</span>],</div><div class="line">       [<span class="number">121.494425</span>,<span class="number">37.969868</span>,<span class="string">'8'</span>,<span class="string">'30'</span>,<span class="string">'0008'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">800</span>,<span class="string">'8:30'</span>],</div><div class="line">       [<span class="number">112.716147</span>,<span class="number">25.85156</span>,<span class="string">'9'</span>,<span class="string">'30'</span>,<span class="string">'0009'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">900</span>,<span class="string">'9:30'</span>],</div><div class="line">       [<span class="number">121.480237</span>,<span class="number">31.236305</span>,<span class="string">'10'</span>,<span class="string">'30'</span>,<span class="string">'0010'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">1000</span>,<span class="string">'10:30'</span>],</div><div class="line">       [<span class="number">120.161693</span>,<span class="number">30.280059</span>,<span class="string">'11'</span>,<span class="string">'30'</span>,<span class="string">'0011'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">1100</span>,<span class="string">'11:30'</span>],</div><div class="line">       [<span class="number">116.413554</span>,<span class="number">39.911013</span>,<span class="string">'12'</span>,<span class="string">'30'</span>,<span class="string">'0012'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">1200</span>,<span class="string">'12:30'</span>],</div><div class="line">       [<span class="number">106.557165</span>,<span class="number">29.570997</span>,<span class="string">'13'</span>,<span class="string">'30'</span>,<span class="string">'0013'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">1300</span>,<span class="string">'13:30'</span>],</div><div class="line">       [<span class="number">113.631349</span>,<span class="number">34.753488</span>,<span class="string">'14'</span>,<span class="string">'30'</span>,<span class="string">'0014'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">60</span>,<span class="string">'14:30'</span>],</div><div class="line">       [<span class="number">113.270793</span>,<span class="number">23.135308</span>,<span class="string">'15'</span>,<span class="string">'30'</span>,<span class="string">'0015'</span>,<span class="string">'12345678'</span>,<span class="string">'2016年12月30日'</span>,<span class="number">80</span>,<span class="string">'15:30'</span>]</div><div class="line">   ];</div><div class="line">   <span class="function"><span class="keyword">function</span> <span class="title">HumanMap</span>(<span class="params">data_infoveh</span>)</span>&#123;</div><div class="line">       <span class="comment">//初始化百度地图</span></div><div class="line">       <span class="keyword">var</span> map = <span class="keyword">new</span> BMap.Map(<span class="string">"HumanMap"</span>,&#123;<span class="attr">mapType</span>: BMAP_HYBRID_</div><div class="line">       MAP&#125;);</div><div class="line">       map.centerAndZoom(<span class="keyword">new</span> BMap.Point(<span class="number">105.723174</span>,<span class="number">36.07597</span>),<span class="number">12</span>);</div><div class="line"></div><div class="line">       <span class="comment">//禁止双击地图放大</span></div><div class="line">       map.disableDoubleClickZoom();</div><div class="line"></div><div class="line">       <span class="comment">//  启用滚轮放大缩小，默认禁用</span></div><div class="line">       map.enableScrollWheelZoom();</div><div class="line">       <span class="keyword">var</span> cityid = <span class="literal">null</span>;</div><div class="line">       <span class="comment">//复杂的自定义覆盖物</span></div><div class="line">       <span class="comment">/*参数point坐标，backImg 图片，oneparameter 周边的设备，twoparameter 上网人数 ,threeparameter 车牌号 ,fourparameter 设备MAC,fiveparameter 时间*/</span></div><div class="line">       <span class="function"><span class="keyword">function</span> <span class="title">ComplexCustomOverlay</span>(<span class="params">point,backImg,num,oneparameter,twoparameter,threeparameter,fourparameter,fiveparameter</span>)</span>&#123;</div><div class="line">           <span class="keyword">this</span>._point=point;</div><div class="line">           <span class="keyword">this</span>._backImg=backImg;</div><div class="line">           <span class="keyword">this</span>._num=num;</div><div class="line">           <span class="keyword">this</span>._oneparameter=oneparameter;</div><div class="line">           <span class="keyword">this</span>._twoparameter=twoparameter;</div><div class="line">           <span class="keyword">this</span>._threeparameter=threeparameter;</div><div class="line">           <span class="keyword">this</span>._fourparameter=fourparameter;</div><div class="line">           <span class="keyword">this</span>._fiveparameter=fiveparameter;</div><div class="line">       &#125;;</div><div class="line">       ComplexCustomOverlay.prototype = <span class="keyword">new</span> BMap.Overlay(); <span class="comment">//覆盖物的抽象基类，所有的覆盖物均继承这个刚发</span></div><div class="line">       ComplexCustomOverlay.prototype.initialize = <span class="function"><span class="keyword">function</span>(<span class="params">map</span>)</span>&#123;</div><div class="line">           <span class="keyword">this</span>._map = map;</div><div class="line">           <span class="keyword">var</span> div = <span class="keyword">this</span>._div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">           div.style.zIndex = BMap.Overlay.getZIndex(<span class="keyword">this</span>._point.lat); <span class="comment">//设置z-index的值</span></div><div class="line">           div.style.background = <span class="string">"url("</span>+<span class="keyword">this</span>._backImg+<span class="string">") no-repeat center center"</span>;</div><div class="line">           div.style.MozUserSelect = <span class="string">"none"</span>;</div><div class="line">           <span class="comment">//设置标注点的样式.</span></div><div class="line">           $(div).css(&#123;<span class="string">"position"</span>:<span class="string">"absolute"</span>,<span class="string">"z-index"</span>:<span class="keyword">this</span>._num,<span class="string">"cursor"</span>:<span class="string">"pointer"</span>,<span class="string">"height"</span>:<span class="string">"30"</span>,<span class="string">"width"</span>:<span class="string">"30"</span>,<span class="string">"white-space"</span>:<span class="string">"nowrap"</span>,<span class="string">"margin"</span>:<span class="string">"0"</span>,<span class="string">"padding"</span>:<span class="string">"0"</span>,<span class="string">"color"</span>:<span class="string">"#fff"</span>,<span class="string">"font-size"</span>:<span class="string">"14px"</span>&#125;);</div><div class="line">           $(div).attr(&#123;<span class="string">"num"</span>:<span class="keyword">this</span>._num,<span class="string">"class"</span>:<span class="string">"pointD"</span>&#125;);</div><div class="line">           <span class="comment">//滑过显示盒子</span></div><div class="line">           <span class="keyword">var</span> onediv=<span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">           $(onediv).css(&#123;<span class="string">"height"</span>:<span class="string">"30"</span>,<span class="string">"width"</span>:<span class="string">"30"</span>,<span class="string">"white-space"</span>:<span class="string">"nowrap"</span>,<span class="string">"margin"</span>:<span class="string">"0"</span>,<span class="string">"padding"</span>:<span class="string">"0"</span>,<span class="string">"color"</span>:<span class="string">"#fff"</span>,<span class="string">"text-align"</span>:<span class="string">"center"</span>,<span class="string">"line-height"</span>:<span class="string">"30px"</span>&#125;);</div><div class="line">           $(onediv).attr(&#123;<span class="string">"class"</span>:<span class="string">"oneDiv"</span>&#125;);</div><div class="line">           onediv.innerHTML=<span class="keyword">this</span>._num;</div><div class="line">           </div><div class="line">           <span class="comment">//定义信息框的样式及要显示的内容</span></div><div class="line">           $(div).append(<span class="string">'&lt;div class="disNCz" style="display:none; position:absolute;padding:10px; left:25px; top:-114px; width: 258px;height:99px; background:#366fb6;"&gt;&lt;div class="close" style="position: absolute;top: 5px;right:3px;font-size: 14px;"&gt;关闭&lt;/div&gt;&lt;div style="width:258px;height: 20px;"&gt;&lt;span style="float: left;width: 95px;"&gt;总装机：&lt;/span&gt;&lt;span style="float: left;width: 160px;" class="zzj"&gt;'</span>+<span class="keyword">this</span>._oneparameter+<span class="string">'kw&lt;/span&gt;&lt;/div&gt;&lt;div style="width: 258px;height: 20px;"&gt;&lt;span style="float:left;width: 95px;"&gt;实时功率：&lt;/span&gt;&lt;span style="float:left;width: 160px;" class="ssgl"&gt;'</span>+<span class="keyword">this</span>._twoparameter+<span class="string">'kw&lt;/span&gt;&lt;/div&gt;&lt;div style="width: 258px;height: 20px;"&gt;&lt;span style="float:left;width: 95px;"&gt;日发电量：&lt;/span&gt;&lt;span style="float:left;width: 160px;" class="rfdl"&gt;'</span>+<span class="keyword">this</span>._threeparameter+<span class="string">'kwh&lt;/span&gt;&lt;/div&gt;&lt;div style="width: 258px;height: 20px;"&gt;&lt;span style="float:left;width: 95px;"&gt;总发电量：&lt;/span&gt;&lt;span style="float:left;width: 160px;" class="zfdl"&gt;'</span>+<span class="keyword">this</span>._fourparameter+<span class="string">'kwh&lt;/span&gt;&lt;/div&gt;'</span>);</div><div class="line">           div.appendChild(onediv);</div><div class="line">           <span class="comment">//点击显示信息框</span></div><div class="line">           <span class="keyword">var</span> timer = <span class="string">""</span>;</div><div class="line">           <span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line">           $(div).on(<span class="string">"click"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">               <span class="comment">//鼠标滑过的时候加一个iframe标签</span></div><div class="line">               <span class="comment">//先清定时器</span></div><div class="line">               <span class="keyword">var</span> dthis =  $(<span class="keyword">this</span>);</div><div class="line">               clearInterval(timer);</div><div class="line">               <span class="comment">//添加定时器</span></div><div class="line">               <span class="keyword">var</span> sj = <span class="keyword">new</span> aaj();</div><div class="line">               <span class="keyword">var</span> $disncz = $(<span class="keyword">this</span>).children(<span class="string">".disNCz"</span>);</div><div class="line">               $(<span class="keyword">this</span>).css(<span class="string">"z-index"</span>,<span class="string">"999999"</span>);</div><div class="line">               $disncz.css(<span class="string">"display"</span>,<span class="string">"block"</span>);</div><div class="line">               </div><div class="line">              <span class="comment">//被点击的覆盖点信息提示框显示其余的都隐藏。 $(this).siblings().children(".disNCz").css("display","none");</span></div><div class="line">               timer = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">                   $disncz.find(<span class="string">".zzj"</span>).text(sj.suiji()+<span class="string">"kw"</span>);</div><div class="line">                   $disncz.find(<span class="string">".ssgl"</span>).text(sj.suiji()+<span class="string">"kw"</span>);</div><div class="line">                   $disncz.find(<span class="string">".rfdl"</span>).text(sj.suiji()+<span class="string">"kw"</span>);</div><div class="line">                   $disncz.find(<span class="string">".zfdl"</span>).text(sj.suiji()+<span class="string">"kw"</span>);</div><div class="line">               &#125;,<span class="number">3000</span>);</div><div class="line">               </div><div class="line">              <span class="comment">//点击关闭按钮然后隐藏信息提示框 $(this).find(".close").on("click",function()&#123;</span></div><div class="line">                   <span class="comment">//alert("aaa")</span></div><div class="line">                   clearInterval(timer);</div><div class="line">                   dthis.css(<span class="string">"z-index"</span>,dthis.attr(<span class="string">"num"</span>));</div><div class="line">                   dthis.children(<span class="string">".disNCz"</span>).css(<span class="string">"display"</span>,<span class="string">"none"</span>);</div><div class="line">                   <span class="comment">//组织事件冒泡</span></div><div class="line">                   event.stopPropagation();</div><div class="line">               &#125;)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">           &#125;);</div><div class="line">   </div><div class="line">           map.getPanes().labelPane.appendChild(div);</div><div class="line">           <span class="keyword">return</span> div;</div><div class="line">       &#125;;</div><div class="line">       ComplexCustomOverlay.prototype.draw = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">           <span class="keyword">var</span> map = <span class="keyword">this</span>._map;</div><div class="line">           <span class="keyword">var</span> pixel = map.pointToOverlayPixel(<span class="keyword">this</span>._point);</div><div class="line">           <span class="keyword">this</span>._div.style.left = pixel.x<span class="number">-15</span>+ <span class="string">"px"</span>;</div><div class="line">           <span class="keyword">this</span>._div.style.top  = pixel.y<span class="number">-15</span>+<span class="string">"px"</span>;</div><div class="line">       &#125;;</div><div class="line">       <span class="comment">//把定位点添加到图中</span></div><div class="line">       <span class="keyword">var</span> o = <span class="number">1</span>;</div><div class="line">       <span class="function"><span class="keyword">function</span> <span class="title">posiPoint</span>(<span class="params"></span>)</span>&#123;</div><div class="line">           <span class="keyword">if</span>(data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>]&gt;<span class="number">0</span> &amp;&amp; data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>] &lt;=<span class="number">4</span>)&#123;</div><div class="line">               <span class="keyword">var</span> backImg = <span class="string">"img/tamg1.png"</span>;</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">if</span>(data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>]&gt;<span class="number">4</span> &amp;&amp; data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>] &lt;=<span class="number">8</span>)&#123;</div><div class="line">               <span class="keyword">var</span> backImg = <span class="string">"img/tamg2.png"</span>;</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">if</span>(data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>]&gt;<span class="number">8</span> &amp;&amp; data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>] &lt;=<span class="number">12</span>)&#123;</div><div class="line">               <span class="keyword">var</span> backImg = <span class="string">"img/tamg3.png"</span>;</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">if</span>(data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>]&gt;<span class="number">12</span> &amp;&amp; data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>] &lt;=<span class="number">15</span>)&#123;</div><div class="line">               <span class="keyword">var</span> backImg = <span class="string">"img/tamg4.png"</span>;</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">var</span> pointd = <span class="keyword">new</span> BMap.Point(data_infoveh[o<span class="number">-1</span>][<span class="number">0</span>],data_infoveh[o<span class="number">-1</span>][<span class="number">1</span>]);</div><div class="line">           </div><div class="line">           <span class="comment">//实例化myCompOverlayveh这个对象</span></div><div class="line">           <span class="keyword">var</span> myCompOverlayveh = <span class="keyword">new</span> ComplexCustomOverlay(pointd,backImg,o,data_infoveh[o<span class="number">-1</span>][<span class="number">2</span>],data_infoveh[o<span class="number">-1</span>][<span class="number">3</span>],data_infoveh[o<span class="number">-1</span>][<span class="number">4</span>],data_infoveh[o<span class="number">-1</span>][<span class="number">5</span>],data_infoveh[o<span class="number">-1</span>][<span class="number">6</span>]);</div><div class="line">           map.addOverlay(myCompOverlayveh);</div><div class="line">           </div><div class="line">           o++;</div><div class="line">           <span class="comment">//设定条件，等满足条件后结束</span></div><div class="line">           <span class="keyword">if</span>(o<span class="number">-1</span>&lt;data_infoveh.length)&#123;</div><div class="line">               timeOut=setTimeout(posiPoint,<span class="number">500</span>);</div><div class="line">           &#125;;</div><div class="line">       &#125;;</div><div class="line">       posiPoint()</div><div class="line">   &#125;;</div><div class="line">   HumanMap(data_infoveh);</div><div class="line">   </div><div class="line">   <span class="comment">//生成的随机数，定时刷新时的模拟数据.</span></div><div class="line">   <span class="keyword">var</span> aaj = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line">   aaj.prototype.suiji = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">       <span class="keyword">return</span> <span class="built_in">Math</span>.floor((<span class="built_in">Math</span>.random()*<span class="number">200</span>+<span class="number">10</span>));</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/07/2017.9.7ocLazyLoad+uiRouter/" rel="next" title="ocLazyLoad+uiRouter">
+                <i class="fa fa-chevron-left"></i> ocLazyLoad+uiRouter
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/16/vw和rem搭配适配终端/" rel="prev" title="搭配vw和rem，布局更优化">
+                搭配vw和rem，布局更优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+
+
+  <div class="comments" id="comments">
+
+    
+
+         <div id="uyan_frame">
+</div>
+
+    
+
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="苏亚强" />
+          <p class="site-author-name" itemprop="name">苏亚强</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天学习，每天进步，将学到的东西分享给大家共勉！</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suyaqiang04" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/p/1005055171754166" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://helloweb.wang" title="前端网" target="_blank">前端网</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baidu.com/" title="百度" target="_blank">百度</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）"><span class="nav-number">1.</span> <span class="nav-text">公司的平台改版需求需要对百度地图的覆盖物和信息框进行自定义的样式，并且要求信息框的数据要实现定时刷新。下面是具体的代码（copy了部分百度上的代码）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">苏亚强</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2127604"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
